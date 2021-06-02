@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 
-namespace exercicio47
+namespace ContaBancaria
 {/* Solicite os seguintes dados de uma conta bancária:
 Saldo do cliente : Double ( não pode ser negativo)
 Limite de cheque especial: Double. (não pode ser negativo)
@@ -29,14 +30,22 @@ Caso o usuário tenha solicitado para sair do programa, saia do loop e termine a
             return saldo;
         }
 
-        public static double Saque(ref double saldo)
+        public static void Saque(ref double saldo,double limite)
         {
             Console.WriteLine("Digite o valor do saque");
-
-            saldo = -double.Parse(Console.ReadLine());
-
-            return saldo;
+            double operacao = double.Parse(Console.ReadLine());
+            if (saldo + operacao > limite)
+            {
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.WriteLine("Operação invalida, saque maior que o limite de crédito");
+                Console.ResetColor();
+            }
+            else
+                saldo -= operacao;
         }
+           
+
+           
 
 
 
@@ -45,6 +54,7 @@ Caso o usuário tenha solicitado para sair do programa, saia do loop e termine a
         {
             double Saldo = 0;
             double Limite = 0;
+            bool resp = true;
             if (Saldo <= 0 || Limite <= 0)
             {
                 do
@@ -56,26 +66,27 @@ Caso o usuário tenha solicitado para sair do programa, saia do loop e termine a
                 }
                 while (Saldo <= 0 || Limite <= 0);
             }
-            bool resp = true;
+            
             do
             {
                 Console.WriteLine("“D” depósito \n “S” saque \n “V” visualizar o saldo \n “X” sair do programa ");
                 string opc = Console.ReadLine();
-                switch (opc)
+                switch (opc.ToUpper())
                 {
                     case "D":
                         Console.Clear();
+                       
                         Deposito(ref Saldo);
                         break;
 
                     case "S":
                         Console.Clear();
-                        Saque(ref Saldo);
+                        Saque(ref Saldo,Limite);
                         break;
 
                     case "V":
                         Console.Clear();
-                        Console.WriteLine($"Seu saldo é de R${Saldo:F2}");
+                        Console.WriteLine($"Seu saldo é de {Saldo.ToString("C2")}");
                         break;
                     case "X":
                         Console.WriteLine("FIM");
